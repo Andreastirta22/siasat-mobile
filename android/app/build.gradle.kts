@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.crewsync_mobile"
+    namespace = "com.siasat.mobile"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

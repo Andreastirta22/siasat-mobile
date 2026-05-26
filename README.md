@@ -1,17 +1,74 @@
-# crewsync_mobile
+# SIASAT Mobile
 
-A new Flutter project.
+Role-based event operations and workforce management platform built with Flutter and Supabase.
 
-## Getting Started
+## Overview
 
-This project is a starting point for a Flutter application.
+SIASAT (Sistem Informasi Aktivitas dan Strategi) is an operational management system designed to support workforce coordination, event lifecycle orchestration, manpower planning, attendance monitoring, and operational reporting.
 
-A few resources to get you started if this is your first Flutter project:
+The system uses a modular feature-based architecture with role-driven operational flows for Founder, Principal, Event Manager, Headcrew, Crew, and Coach.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Core Features
+
+- Role-based dashboard system
+- Event lifecycle management
+- Venue operational setup
+- Headcrew assignment workflow
+- Manpower planning & fulfillment
+- Workforce identity governance
+- Attendance monitoring
+- Daily sales reporting
+- Operational reporting dashboard
+- Pricing & report configuration
+- Evidence upload system
+- Workforce operational tracking
+
+---
+
+## Architecture Highlights
+
+- Feature-based Flutter architecture
+- Modular role dashboard structure
+- Governance-oriented workforce flow
+- Event lifecycle state machine
+- Operational delegation system
+- Supabase backend integration
+- GoRouter navigation architecture
+
+---
+
+## Tech Stack
+
+- Flutter
+- Dart
+- Supabase
+- PostgreSQL
+- GoRouter
+
+---
+
+## Current Status
+
+Currently in active development.
+
+---
+
+## Project Structure
+
+```bash
+lib/
+├── core/
+├── features/
+├── models/
+├── routes/
+├── services/
+└── shared/
+```
+
+---
+
+## Author
+
+Andreas Tirta Sanjaya
