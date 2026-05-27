@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:crewsync_mobile/core/theme/app_colors.dart';
+import 'package:siasat_mobile/core/theme/app_colors.dart';
 
 enum EventCreationStep { createEvent, setupVenue, assignHeadcrew, ready }
 

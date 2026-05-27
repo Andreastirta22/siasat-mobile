@@ -27,7 +27,7 @@ import '../../../../profile/presentation/pages/profile_page.dart';
 /// =============================
 /// Dashboard lifecycle status card
 
-import 'package:crewsync_mobile/features/role_dashboards/event_manager/dashboard/widgets/event_status_card.dart';
+import 'package:siasat_mobile/features/role_dashboards/event_manager/dashboard/widgets/event_status_card.dart';
 
 /// =============================
 /// SHARED DASHBOARD WIDGETS

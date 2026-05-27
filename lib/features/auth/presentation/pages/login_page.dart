@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../services/supabase/auth_service.dart';
+import '../widgets/hero_section.dart';
+import '../widgets/feature_highlight_section.dart';
+import '../widgets/event_showcase_section.dart';
+import '../widgets/testimonial_section.dart';
+import '../widgets/login_card.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -28,17 +33,17 @@ class _LoginPageState extends State<LoginPage>
     super.initState();
     _animController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 1000),
     );
     _fadeIn = CurvedAnimation(
       parent: _animController,
-      curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
+      curve: const Interval(0.0, 0.8, curve: Curves.easeOut),
     );
-    _slideUp = Tween<Offset>(begin: const Offset(0, 0.12), end: Offset.zero)
+    _slideUp = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
         .animate(
           CurvedAnimation(
             parent: _animController,
-            curve: const Interval(0.0, 0.7, curve: Curves.easeOut),
+            curve: const Interval(0.0, 0.8, curve: Curves.easeOut),
           ),
         );
     _animController.forward();
@@ -96,13 +101,33 @@ class _LoginPageState extends State<LoginPage>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toString()),
+          content: Row(
+            children: [
+              const Icon(
+                Icons.error_outline_rounded,
+                color: Color(0xFFF5A623),
+                size: 18,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  e.toString(),
+                  style: const TextStyle(
+                    color: Color(0xFFF0F0F0),
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
+          ),
           backgroundColor: const Color(0xFF1A1A1A),
           behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: Color(0xFFF5A623), width: 1),
+            borderRadius: BorderRadius.circular(14),
+            side: const BorderSide(color: Color(0xFF2A2A2A), width: 1),
           ),
+          elevation: 0,
         ),
       );
     }
@@ -113,24 +138,24 @@ class _LoginPageState extends State<LoginPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0E0E0E),
+      backgroundColor: const Color(0xFF0A0A0A),
       body: Stack(
         children: [
-          // ── Grid texture background ──
+          // ── Background: subtle dot grid ──
           Positioned.fill(child: CustomPaint(painter: _GridPainter())),
 
-          // ── Amber glow top-left ──
+          // ── Ambient glow: top-left amber ──
           Positioned(
-            top: -120,
-            left: -80,
+            top: -140,
+            left: -100,
             child: Container(
-              width: 340,
-              height: 340,
+              width: 380,
+              height: 380,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    const Color(0xFFF5A623).withOpacity(0.18),
+                    const Color(0xFFF5A623).withOpacity(0.14),
                     Colors.transparent,
                   ],
                 ),
@@ -138,176 +163,96 @@ class _LoginPageState extends State<LoginPage>
             ),
           ),
 
-          // ── Main content ──
+          // ── Ambient glow: bottom-right purple ──
+          Positioned(
+            bottom: -160,
+            right: -120,
+            child: Container(
+              width: 340,
+              height: 340,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFF7C4DFF).withOpacity(0.08),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ── Main scrollable content ──
           SafeArea(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 28),
-                child: FadeTransition(
-                  opacity: _fadeIn,
-                  child: SlideTransition(
-                    position: _slideUp,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // ── Logo / Brand ──
-                        Row(
-                          children: [
-                            Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF5A623),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Icon(
-                                Icons.grid_view_rounded,
-                                color: Color(0xFF0E0E0E),
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            const Text(
-                              'CrewSync',
-                              style: TextStyle(
-                                color: Color(0xFFF5F5F5),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                          ],
-                        ),
+            child: FadeTransition(
+              opacity: _fadeIn,
+              child: SlideTransition(
+                position: _slideUp,
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          // Hero
+                          HeroSection(),
 
-                        const SizedBox(height: 52),
+                          const SizedBox(height: 44),
 
-                        // ── Heading ──
-                        const Text(
-                          'Welcome\nback.',
-                          style: TextStyle(
-                            color: Color(0xFFF5F5F5),
-                            fontSize: 42,
-                            fontWeight: FontWeight.w800,
-                            height: 1.1,
-                            letterSpacing: -0.5,
+                          // Login Card
+                          LoginCard(
+                            emailController: emailController,
+                            passwordController: passwordController,
+                            obscurePassword: _obscurePassword,
+                            isLoading: isLoading,
+                            onTogglePassword: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            onSignIn: signIn,
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Sign in to your account to continue.',
-                          style: TextStyle(
-                            color: Color(0xFF7A7A7A),
-                            fontSize: 14,
-                            letterSpacing: 0.2,
-                          ),
-                        ),
 
-                        const SizedBox(height: 44),
+                          const SizedBox(height: 56),
 
-                        // ── Email field ──
-                        _buildLabel('Email address'),
-                        const SizedBox(height: 8),
-                        _buildTextField(
-                          controller: emailController,
-                          hint: 'you@crewsync.app',
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: Icons.alternate_email_rounded,
-                        ),
+                          // Section divider
+                          _buildSectionDivider(),
 
-                        const SizedBox(height: 20),
+                          const SizedBox(height: 48),
 
-                        // ── Password field ──
-                        _buildLabel('Password'),
-                        const SizedBox(height: 8),
-                        _buildTextField(
-                          controller: passwordController,
-                          hint: '••••••••',
-                          obscureText: _obscurePassword,
-                          prefixIcon: Icons.lock_outline_rounded,
-                          suffix: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: const Color(0xFF5A5A5A),
-                              size: 20,
-                            ),
-                            onPressed: () => setState(
-                              () => _obscurePassword = !_obscurePassword,
-                            ),
-                          ),
-                        ),
+                          // Features
+                          FeatureHighlightSection(),
 
-                        const SizedBox(height: 32),
+                          const SizedBox(height: 56),
 
-                        // ── Login button ──
-                        SizedBox(
-                          width: double.infinity,
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: isLoading ? null : signIn,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF5A623),
-                              foregroundColor: const Color(0xFF0E0E0E),
-                              disabledBackgroundColor: const Color(
-                                0xFFF5A623,
-                              ).withOpacity(0.4),
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: isLoading
-                                ? const SizedBox(
-                                    width: 22,
-                                    height: 22,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2.5,
-                                      color: Color(0xFF0E0E0E),
-                                    ),
-                                  )
-                                : const Text(
-                                    'Sign In',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: 0.6,
-                                    ),
-                                  ),
-                          ),
-                        ),
+                          // Section divider
+                          _buildSectionDivider(),
 
-                        const SizedBox(height: 24),
+                          const SizedBox(height: 48),
 
-                        // ── Register link ──
-                        Center(
-                          child: GestureDetector(
-                            onTap: () => context.push('/register'),
-                            child: RichText(
-                              text: const TextSpan(
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Color(0xFF5A5A5A),
-                                ),
-                                children: [
-                                  TextSpan(text: "Don't have an account? "),
-                                  TextSpan(
-                                    text: 'Register',
-                                    style: TextStyle(
-                                      color: Color(0xFFF5A623),
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                          // Events
+                          EventShowcaseSection(),
 
-                        const SizedBox(height: 32),
-                      ],
+                          const SizedBox(height: 56),
+
+                          // Section divider
+                          _buildSectionDivider(),
+
+                          const SizedBox(height: 48),
+
+                          // Testimonials
+                          TestimonialSection(),
+
+                          const SizedBox(height: 48),
+
+                          // Footer
+                          _buildFooter(),
+
+                          const SizedBox(height: 40),
+                        ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -317,58 +262,71 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 
-  Widget _buildLabel(String text) {
-    return Text(
-      text.toUpperCase(),
-      style: const TextStyle(
-        color: Color(0xFF5A5A5A),
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 1.4,
+  Widget _buildSectionDivider() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: Row(
+        children: [
+          Expanded(child: Container(height: 1, color: const Color(0xFF1A1A1A))),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            width: 5,
+            height: 5,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5A623).withOpacity(0.4),
+              shape: BoxShape.circle,
+            ),
+          ),
+          Expanded(child: Container(height: 1, color: const Color(0xFF1A1A1A))),
+        ],
       ),
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    required IconData prefixIcon,
-    TextInputType keyboardType = TextInputType.text,
-    bool obscureText = false,
-    Widget? suffix,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      keyboardType: keyboardType,
-      style: const TextStyle(
-        color: Color(0xFFF0F0F0),
-        fontSize: 15,
-        letterSpacing: 0.3,
-      ),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Color(0xFF3A3A3A), fontSize: 15),
-        prefixIcon: Icon(prefixIcon, color: const Color(0xFF4A4A4A), size: 20),
-        suffixIcon: suffix,
-        filled: true,
-        fillColor: const Color(0xFF181818),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF2A2A2A)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFF5A623), width: 1.5),
-        ),
+  Widget _buildFooter() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28),
+      child: Column(
+        children: [
+          Container(height: 1, color: const Color(0xFF1A1A1A)),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5A623),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.grid_view_rounded,
+                      color: Color(0xFF0A0A0A),
+                      size: 14,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'SIASAT',
+                    style: TextStyle(
+                      color: Color(0xFF6A6A6A),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+              const Text(
+                '© 2025 SIASAT',
+                style: TextStyle(color: Color(0xFF3A3A3A), fontSize: 12),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -379,13 +337,13 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFF2A2A2A).withOpacity(0.5)
+      ..color = const Color(0xFF2A2A2A).withOpacity(0.35)
       ..strokeWidth = 1;
 
-    const spacing = 28.0;
+    const spacing = 32.0;
     for (double x = 0; x < size.width; x += spacing) {
       for (double y = 0; y < size.height; y += spacing) {
-        canvas.drawCircle(Offset(x, y), 1.2, paint);
+        canvas.drawCircle(Offset(x, y), 1.0, paint);
       }
     }
   }
